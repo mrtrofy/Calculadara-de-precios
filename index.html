@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Pro</title>
+    <title>Calculadora Pro - Venta</title>
     
     <!-- Configuración para App Instalable (PWA) -->
     <meta name="theme-color" content="#2563eb">
@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="Calculadora">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2344/2344132.png">
     
-    <!-- Manifiesto Inline (Simulado para que sea un solo archivo) -->
+    <!-- Manifiesto Inline -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNhbGN1bGFkb3JhIGRlIFByZWNpb3MgUHJvIiwKICAic2hvcnRfbmFtZSI6ICJDYWxjUHJvIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmOWZhZmIiLAogICJ0aGVtZV9jb2xvciI6ICIjMjU2M2ViIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvMjM0NC8yMzQ0MTMyLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ==">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,148 +24,205 @@
             -webkit-appearance: none; 
             margin: 0; 
         }
-        /* Ajuste para notch en móviles */
-        .safe-area-padding {
-            padding-top: env(safe-area-inset-top);
+        .custom-shadow {
+            box-shadow: 0 20px 50px -12px rgb(0 0 0 / 0.15);
+        }
+        .product-list-container {
+            max-height: 400px;
+            overflow-y: auto;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-50 min-h-screen py-8 px-4">
 
-    <div class="max-w-4xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-200">
-        
-        <!-- Panel de Configuración -->
-        <div class="w-full md:w-1/2 p-8 bg-white border-r border-gray-100">
-            <div class="flex items-center justify-between mb-8">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-blue-600 rounded-lg text-white shadow-lg shadow-blue-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="8" x2="16" y1="10" y2="10"/><line x1="8" x2="8" y1="14" y2="18"/><line x1="12" x2="12" y1="14" y2="18"/><line x1="16" x2="16" y1="14" y2="18"/></svg>
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Contenedor Principal Calculadora -->
+        <div class="w-full bg-white rounded-[2.5rem] custom-shadow overflow-hidden flex flex-col md:flex-row border border-gray-100">
+            
+            <!-- Panel de Entrada de Datos -->
+            <div class="w-full md:w-1/2 p-8 bg-white border-r border-gray-50">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 bg-blue-600 rounded-xl text-white shadow-lg shadow-blue-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="8" x2="16" y1="10" y2="10"/><line x1="8" x2="8" y1="14" y2="18"/><line x1="12" x2="12" y1="14" y2="18"/><line x1="16" x2="16" y1="14" y2="18"/></svg>
+                        </div>
+                        <h1 class="text-2xl font-black text-slate-800 tracking-tight">Venta Pro</h1>
                     </div>
-                    <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Venta Pro</h1>
+                    <button id="installBtn" class="hidden text-[10px] bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold animate-pulse tracking-wider uppercase">
+                        INSTALAR
+                    </button>
                 </div>
-                <!-- Botón de Instalación (Se activa vía JS) -->
-                <button id="installBtn" class="hidden text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold animate-pulse">
-                    INSTALAR APP
-                </button>
+
+                <div class="space-y-5">
+                    <!-- Nombre del Producto -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">
+                            Nombre del Producto
+                        </label>
+                        <input
+                            type="text"
+                            id="nombreProducto"
+                            placeholder="Ej. Detergente Líquido"
+                            oninput="actualizarNombre(this.value)"
+                            class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-500 rounded-2xl outline-none transition-all font-semibold text-slate-700 placeholder:text-slate-300"
+                        />
+                    </div>
+
+                    <!-- Input Costo Total -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">
+                            Costo de la Caja
+                        </label>
+                        <div class="relative group">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 font-bold text-lg">$</span>
+                            <input
+                                type="number"
+                                id="costoTotal"
+                                value="100"
+                                inputmode="decimal"
+                                oninput="calcular()"
+                                class="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-500 rounded-2xl outline-none transition-all font-bold text-xl text-slate-700"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Input Unidades -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">
+                            Unidades en Caja
+                        </label>
+                        <input
+                            type="number"
+                            id="unidadesCaja"
+                            value="10"
+                            inputmode="numeric"
+                            oninput="calcular()"
+                            class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-500 rounded-2xl outline-none transition-all font-bold text-xl text-slate-700"
+                        />
+                    </div>
+
+                    <!-- Input Porcentaje -->
+                    <div>
+                        <div class="flex justify-between mb-2 items-center">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Margen de Ganancia</label>
+                            <span id="labelMargen" class="bg-blue-600 text-white text-xs px-2 py-1 rounded-md font-bold">30%</span>
+                        </div>
+                        <input
+                            type="range"
+                            id="margenSlider"
+                            min="1"
+                            max="300"
+                            value="30"
+                            oninput="syncMargen(this.value)"
+                            class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600 mb-4"
+                        />
+                        <div class="relative">
+                            <input
+                                type="number"
+                                id="margenInput"
+                                value="30"
+                                inputmode="numeric"
+                                oninput="syncMargen(this.value)"
+                                class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-500 rounded-xl outline-none transition-all font-bold text-center text-blue-600 text-lg"
+                            />
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 font-bold">%</span>
+                        </div>
+                    </div>
+
+                    <!-- Botón Guardar -->
+                    <button 
+                        onclick="guardarProducto()"
+                        class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-200"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        GUARDAR PRODUCTO
+                    </button>
+                </div>
             </div>
 
-            <div class="space-y-6">
-                <!-- Input Costo Total -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-500 mb-2 flex items-center gap-2">
-                        COSTO DE CAJA
-                    </label>
-                    <div class="relative group">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
-                        <input
-                            type="number"
-                            id="costoTotal"
-                            value="100"
-                            inputmode="decimal"
-                            oninput="calcular()"
-                            class="w-full pl-10 pr-4 py-4 bg-gray-50 border-2 border-transparent group-hover:bg-white focus:bg-white border-gray-100 focus:border-blue-500 rounded-2xl outline-none transition-all font-bold text-lg text-gray-700"
-                        />
-                    </div>
+            <!-- Panel de Resultados -->
+            <div class="w-full md:w-1/2 p-8 bg-slate-900 text-white flex flex-col justify-center relative">
+                <div class="absolute top-0 right-0 p-8 opacity-5">
+                    <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
                 </div>
 
-                <!-- Input Unidades -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-500 mb-2">
-                        UNIDADES EN LA CAJA
-                    </label>
-                    <input
-                        type="number"
-                        id="unidadesCaja"
-                        value="10"
-                        inputmode="numeric"
-                        oninput="calcular()"
-                        class="w-full px-4 py-4 bg-gray-50 border-2 border-transparent focus:bg-white border-gray-100 focus:border-blue-500 rounded-2xl outline-none transition-all font-bold text-lg text-gray-700"
-                    />
-                </div>
-
-                <!-- Input Porcentaje -->
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <label class="text-sm font-semibold text-gray-500 uppercase">Margen Deseado</label>
-                        <span id="labelMargen" class="text-blue-600 font-bold">30%</span>
+                <div class="space-y-8 relative z-10">
+                    <div class="text-center">
+                        <h2 id="displayNombre" class="text-blue-400 font-bold text-sm uppercase tracking-[0.3em] mb-4 min-h-[1.25rem]">Nuevo Producto</h2>
+                        <span class="text-slate-500 text-[10px] uppercase tracking-widest font-black">Precio de Venta Sugerido</span>
+                        <div id="precioVenta" class="text-7xl md:text-8xl font-black mt-2 text-white tabular-nums tracking-tighter">
+                            $13.00
+                        </div>
                     </div>
-                    <input
-                        type="range"
-                        id="margenSlider"
-                        min="1"
-                        max="300"
-                        value="30"
-                        oninput="syncMargen(this.value)"
-                        class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 mb-6"
-                    />
-                    <div class="relative">
-                        <input
-                            type="number"
-                            id="margenInput"
-                            value="30"
-                            inputmode="numeric"
-                            oninput="syncMargen(this.value)"
-                            class="w-full px-4 py-3 bg-gray-50 border-2 border-transparent focus:bg-white border-gray-100 focus:border-blue-500 rounded-xl outline-none transition-all font-bold text-center text-blue-600"
-                        />
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-800/40 p-5 rounded-3xl border border-white/5 backdrop-blur-sm">
+                            <p class="text-slate-500 text-[10px] mb-1 font-bold uppercase tracking-widest">Costo Unidad</p>
+                            <p id="costoUnidad" class="text-2xl font-black text-white">$10.00</p>
+                        </div>
+                        <div class="bg-slate-800/40 p-5 rounded-3xl border border-white/5 backdrop-blur-sm">
+                            <p class="text-slate-500 text-[10px] mb-1 font-bold uppercase tracking-widest">Ganancia</p>
+                            <p id="gananciaUnidad" class="text-2xl font-black text-emerald-400">+$3.00</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-blue-600 to-blue-800 p-7 rounded-[2.5rem] shadow-2xl shadow-blue-900/40">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="p-2 bg-white/20 rounded-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9l-3-3H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+                            </div>
+                            <span class="font-black text-xl tracking-tight text-white">Caja Completa</span>
+                        </div>
+                        <div class="space-y-3.5">
+                            <div class="flex justify-between text-sm text-blue-100/80 font-semibold uppercase tracking-wider">
+                                <span>Inversión</span>
+                                <span id="invTotal" class="text-white font-bold">$100.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-blue-100/80 font-semibold uppercase tracking-wider">
+                                <span>Venta Total</span>
+                                <span id="ventaTotal" class="text-white font-bold">$130.00</span>
+                            </div>
+                            <div class="h-px bg-white/10 my-3"></div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-black text-white text-lg">UTILIDAD</span>
+                                <span id="gananciaTotal" class="text-4xl font-black text-white">$30.00</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Panel de Resultados -->
-        <div class="w-full md:w-1/2 p-8 bg-slate-900 text-white flex flex-col justify-center relative">
-            <!-- Adorno visual -->
-            <div class="absolute top-0 right-0 p-8 opacity-10">
-                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2v20M2 12h20"/></svg>
+        <!-- Sección de Productos Guardados -->
+        <div class="bg-white rounded-[2.5rem] p-8 border border-gray-100 custom-shadow">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Z"/><path d="M2 7h16"/><path d="M7 2v5"/><path d="M12 2v5"/><path d="M15 14v7"/><path d="M19 14v7"/><path d="M22 14v7"/><path d="M15 18h7"/></svg>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800 tracking-tight uppercase">Productos Guardados</h3>
+                </div>
+                <span id="contadorProductos" class="bg-slate-100 text-slate-500 text-xs font-bold px-3 py-1 rounded-full">0 productos</span>
             </div>
 
-            <div class="space-y-8 relative z-10">
-                <div class="text-center">
-                    <span class="text-slate-400 text-xs uppercase tracking-[0.2em] font-bold">PVP Sugerido Unidad</span>
-                    <div id="precioVenta" class="text-7xl font-black mt-2 text-white tabular-nums">
-                        $13.00
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
-                        <p class="text-slate-500 text-[10px] mb-1 font-bold uppercase tracking-wider">Costo Unidad</p>
-                        <p id="costoUnidad" class="text-xl font-bold text-white">$10.00</p>
-                    </div>
-                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
-                        <p class="text-slate-500 text-[10px] mb-1 font-bold uppercase tracking-wider">Ganancia Unidad</p>
-                        <p id="gananciaUnidad" class="text-xl font-bold text-emerald-400">+$3.00</p>
-                    </div>
-                </div>
-
-                <div class="bg-blue-600 p-6 rounded-[2rem] shadow-2xl shadow-blue-900/20">
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="p-1.5 bg-white/20 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-                        </div>
-                        <span class="font-bold text-lg">Balance Total</span>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between text-sm text-blue-100 font-medium">
-                            <span>Inversión</span>
-                            <span id="invTotal">$100.00</span>
-                        </div>
-                        <div class="flex justify-between text-sm text-blue-100 font-medium">
-                            <span>Venta Total</span>
-                            <span id="ventaTotal">$130.00</span>
-                        </div>
-                        <div class="h-px bg-white/20 my-2"></div>
-                        <div class="flex justify-between items-end">
-                            <span class="font-bold text-white">Ganancia Neta</span>
-                            <span id="gananciaTotal" class="text-3xl font-black text-white">$30.00</span>
-                        </div>
-                    </div>
+            <div id="listaProductos" class="product-list-container grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Los productos se insertarán aquí dinámicamente -->
+                <div id="emptyState" class="col-span-full py-12 text-center">
+                    <p class="text-slate-400 font-medium">Aún no tienes productos guardados.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        let productos = JSON.parse(localStorage.getItem('productosVentaPro')) || [];
+
+        // Actualizar nombre dinámicamente
+        function actualizarNombre(val) {
+            const display = document.getElementById('displayNombre');
+            display.innerText = val.trim() === "" ? "Nuevo Producto" : val;
+        }
+
         // Lógica de la calculadora
         function syncMargen(val) {
             document.getElementById('margenSlider').value = val;
@@ -192,6 +249,86 @@
             document.getElementById('invTotal').innerText = '$' + costoTotal.toFixed(2);
             document.getElementById('ventaTotal').innerText = '$' + ventaTotal.toFixed(2);
             document.getElementById('gananciaTotal').innerText = '$' + gananciaTotal.toFixed(2);
+
+            return {
+                costoUnidad,
+                precioVenta,
+                gananciaUnidad: gananciaDeseada,
+                gananciaTotal
+            };
+        }
+
+        // Lógica de Gestión de Productos
+        function guardarProducto() {
+            const nombre = document.getElementById('nombreProducto').value.trim() || "Producto sin nombre";
+            const resultados = calcular();
+            
+            const nuevoProducto = {
+                id: Date.now(),
+                nombre: nombre,
+                costoTotal: parseFloat(document.getElementById('costoTotal').value),
+                unidades: parseInt(document.getElementById('unidadesCaja').value),
+                margen: parseInt(document.getElementById('margenInput').value),
+                pvp: resultados.precioVenta.toFixed(2),
+                utilidad: resultados.gananciaTotal.toFixed(2)
+            };
+
+            productos.unshift(nuevoProducto);
+            localStorage.setItem('productosVentaPro', JSON.stringify(productos));
+            renderizarLista();
+            
+            // Efecto visual de guardado (opcional: limpiar campos)
+            document.getElementById('nombreProducto').value = "";
+            actualizarNombre("");
+        }
+
+        function borrarProducto(id) {
+            productos = productos.filter(p => p.id !== id);
+            localStorage.setItem('productosVentaPro', JSON.stringify(productos));
+            renderizarLista();
+        }
+
+        function renderizarLista() {
+            const container = document.getElementById('listaProductos');
+            const contador = document.getElementById('contadorProductos');
+            
+            if (productos.length === 0) {
+                container.innerHTML = `
+                    <div id="emptyState" class="col-span-full py-12 text-center">
+                        <p class="text-slate-400 font-medium">Aún no tienes productos guardados.</p>
+                    </div>
+                `;
+                contador.innerText = "0 productos";
+                return;
+            }
+
+            contador.innerText = `${productos.length} producto${productos.length > 1 ? 's' : ''}`;
+            container.innerHTML = productos.map(p => `
+                <div class="bg-slate-50 border border-slate-100 p-5 rounded-3xl flex flex-col justify-between group hover:border-blue-200 transition-all">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="font-bold text-slate-800 truncate pr-2 uppercase text-sm">${p.nombre}</h4>
+                            <button onclick="borrarProducto(${p.id})" class="text-slate-300 hover:text-red-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            <div>Unidades: <span class="text-slate-600">${p.unidades}</span></div>
+                            <div>Margen: <span class="text-blue-600">${p.margen}%</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-3">
+                        <div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase">PVP Unidad</p>
+                            <p class="text-lg font-black text-slate-800">$${p.pvp}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] font-black text-slate-400 uppercase">Utilidad Total</p>
+                            <p class="text-lg font-black text-emerald-500">$${p.utilidad}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // Lógica de Instalación (PWA)
@@ -215,7 +352,7 @@
             }
         });
 
-        // Service Worker corregido: No registrar si estamos en un entorno de pruebas con protocolos no compatibles
+        // Service Worker
         if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
             try {
                 const swCode = `
@@ -224,18 +361,14 @@
                 `;
                 const blob = new Blob([swCode], { type: 'application/javascript' });
                 const swUrl = URL.createObjectURL(blob);
-                
-                // Solo registramos si no estamos en un entorno restrictivo que bloquee blob:
-                navigator.serviceWorker.register(swUrl).catch(err => {
-                    // Fallback silencioso si el entorno bloquea blobs en SW
-                    console.warn("ServiceWorker registration skipped in this environment.");
-                });
-            } catch (e) {
-                console.warn("ServiceWorker not supported in this environment context.");
-            }
+                navigator.serviceWorker.register(swUrl).catch(() => {});
+            } catch (e) {}
         }
 
-        window.onload = calcular;
+        window.onload = () => {
+            calcular();
+            renderizarLista();
+        };
     </script>
 </body>
 </html>
