@@ -28,8 +28,19 @@
             box-shadow: 0 20px 50px -12px rgb(0 0 0 / 0.15);
         }
         .product-list-container {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
+        }
+        /* Personalización de scrollbar */
+        .product-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .product-list-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .product-list-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -62,7 +73,7 @@
                         <input
                             type="text"
                             id="nombreProducto"
-                            placeholder="Ej. Detergente Líquido"
+                            placeholder="Ej. Jabón Líquido"
                             oninput="actualizarNombre(this.value)"
                             class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-500 rounded-2xl outline-none transition-all font-semibold text-slate-700 placeholder:text-slate-300"
                         />
@@ -202,10 +213,10 @@
                     </div>
                     <h3 class="text-xl font-black text-slate-800 tracking-tight uppercase">Productos Guardados</h3>
                 </div>
-                <span id="contadorProductos" class="bg-slate-100 text-slate-500 text-xs font-bold px-3 py-1 rounded-full">0 productos</span>
+                <span id="contadorProductos" class="bg-slate-100 text-slate-500 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-tighter">0 productos</span>
             </div>
 
-            <div id="listaProductos" class="product-list-container grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div id="listaProductos" class="product-list-container grid grid-cols-1 md:grid-cols-2 gap-4 p-1">
                 <!-- Los productos se insertarán aquí dinámicamente -->
                 <div id="emptyState" class="col-span-full py-12 text-center">
                     <p class="text-slate-400 font-medium">Aún no tienes productos guardados.</p>
@@ -277,12 +288,13 @@
             localStorage.setItem('productosVentaPro', JSON.stringify(productos));
             renderizarLista();
             
-            // Efecto visual de guardado (opcional: limpiar campos)
+            // Efecto visual y limpieza
             document.getElementById('nombreProducto').value = "";
             actualizarNombre("");
         }
 
         function borrarProducto(id) {
+            // Confirmación simple antes de borrar
             productos = productos.filter(p => p.id !== id);
             localStorage.setItem('productosVentaPro', JSON.stringify(productos));
             renderizarLista();
@@ -304,12 +316,16 @@
 
             contador.innerText = `${productos.length} producto${productos.length > 1 ? 's' : ''}`;
             container.innerHTML = productos.map(p => `
-                <div class="bg-slate-50 border border-slate-100 p-5 rounded-3xl flex flex-col justify-between group hover:border-blue-200 transition-all">
+                <div class="bg-white border-2 border-slate-100 p-5 rounded-[2rem] flex flex-col justify-between group hover:border-blue-200 transition-all shadow-sm">
                     <div>
                         <div class="flex justify-between items-start mb-3">
-                            <h4 class="font-bold text-slate-800 truncate pr-2 uppercase text-sm">${p.nombre}</h4>
-                            <button onclick="borrarProducto(${p.id})" class="text-slate-300 hover:text-red-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            <h4 class="font-black text-slate-800 truncate pr-2 uppercase text-sm tracking-tighter">${p.nombre}</h4>
+                            <button 
+                                onclick="borrarProducto(${p.id})" 
+                                class="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center"
+                                title="Borrar producto"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                             </button>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -317,14 +333,14 @@
                             <div>Margen: <span class="text-blue-600">${p.margen}%</span></div>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-3">
+                    <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
                         <div>
                             <p class="text-[9px] font-black text-slate-400 uppercase">PVP Unidad</p>
-                            <p class="text-lg font-black text-slate-800">$${p.pvp}</p>
+                            <p class="text-xl font-black text-slate-800">$${p.pvp}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-[9px] font-black text-slate-400 uppercase">Utilidad Total</p>
-                            <p class="text-lg font-black text-emerald-500">$${p.utilidad}</p>
+                            <p class="text-xl font-black text-emerald-500">$${p.utilidad}</p>
                         </div>
                     </div>
                 </div>
